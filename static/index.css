@@ -1,0 +1,8 @@
+
+:root {
+    --bg: #CADAFF
+}
+
+body {
+    background-color: var(--bg);
+}
