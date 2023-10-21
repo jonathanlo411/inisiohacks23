@@ -10,6 +10,21 @@ app = Flask(__name__)
 def landing_page():
     return render_template('index.html')
 
-@app.route('/login', methods=['GET', 'POST)'])
+@app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    return render_template('login.html')
+    if request.method == 'POST':
+        user_input = request.form
+        username = user_input['username']
+        password = user_input['password']
+        print(username, password, flush=True)
+
+        # Check user exists in DB
+        ...
+
+        # Check if user pass matches password
+        ...
+
+        # Redirect if good else error if wrong
+        ...
+    else:
+        return render_template('login.html')
