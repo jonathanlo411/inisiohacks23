@@ -4,5 +4,6 @@ flask-env
 # Bye pycache
 __pycache__
 
-# ENV
+
+# Removes hidden :)
 .env
