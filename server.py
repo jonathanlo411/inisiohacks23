@@ -19,7 +19,10 @@ mongo = PyMongo(app)
 # Page Render
 @app.route('/', methods=['GET'])
 def landing_page():
-    return render_template('index.html')
+    context = {
+        "user": "jolo"
+    }
+    return render_template('index.html', context=context)
 
 
 
