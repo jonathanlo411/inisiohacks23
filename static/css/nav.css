@@ -1,0 +1,45 @@
+
+nav {
+    background-color: var(--modal);
+    display: flex;
+    height: 5vh;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#logo {
+    height: 4vh;
+    margin: 2vh;
+}
+
+#links {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 20%;
+    margin: 2vh;
+}
+
+#links > a,a:visited {
+    text-decoration: none;
+    color: black;
+    margin-right: 2%;
+    display: flex;
+    align-items: center;
+    font-size: 1.75vh;
+    font-weight: 800;
+}
+
+#pfp {
+    height: 3vh;
+    width: 3vh;
+    background-position: center;
+    background-size: cover;
+    border-radius: 100px;
+}
+#pfp:hover { cursor: pointer; }
+
+#dashboard-content {
+    width: 70%;
+    margin: auto;
+}

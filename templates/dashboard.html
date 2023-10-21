@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/dashboard.css')}}">
 </head>
 <body>
-    This is dashboard
+    {% extends 'nav.html' %}
+    {% block content %}
+
+    <div>
+        <h1>Good morning Jonathan,</h1>
+        <h4>Here are some things that may require your attention.</h4>
+    </div>
+
+    {% endblock %}    
 </body>
 </html>

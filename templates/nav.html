@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/master.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/nav.css')}}">
+</head>
+<body>
+    <nav>
+        <img id="logo" src="https://www.ds3ucsd.com/images/logos/logo-dark.png" alt="logo">
+        <div id="links">
+            <a href="/dashboard">Home</a>
+            <a href="/dashboard">My Scores</a>
+            <a href="/dashboard">Explore</a>
+            <div id="pfp" style="background-image: url(https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg);"></div>
+        </div>
+    </nav>
+    <div id="dashboard-content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
