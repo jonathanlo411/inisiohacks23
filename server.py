@@ -36,6 +36,7 @@ def landing_page():
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
     if request.method == 'POST':
+        user_input = request.get_json()
         temp = mongo.db.users
         user_input = request.form
         username = user_input['username']
