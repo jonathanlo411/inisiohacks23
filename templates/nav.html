@@ -24,7 +24,9 @@
                 <a href="/profile">My Profile</a>
                 <a href="/settings">Settings</a>
                 <hr>
-                <button id="logout">Sign Out</button>
+                <form action="/api/logout" method="POST">
+                    <button id="logout" type="submit">Sign Out</button>
+                </form>
             </div>
             </section>
 
