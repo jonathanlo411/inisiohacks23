@@ -22,12 +22,14 @@ document.getElementById("submit"),addEventListener("submit", async (e) => {
             body: JSON.stringify(payload),
             headers: { "Content-Type": "application/json" }
         })
+        let data = await res.json()
 
         // Handle User Submissions
-        if (res.success) {
+        if (data.success) {
             // Redirect to dashboard
         } else {
-            raiseError((res.message) ? res.message : "Something went wrong!")
+            raiseError((data.message) ? data.message : "Something went wrong!")
+            console.log(res)
         }
     }
 })
