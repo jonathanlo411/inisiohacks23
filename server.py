@@ -163,7 +163,8 @@ def explore_page():
     if (not validate_session(session)):
         return redirect('login')
     else:
-        return render_template('explore.html', user=obtain_user_from_session(session))
+        music_list = list(mongo.db.musicScores.find())
+        return render_template('explore.html', user=obtain_user_from_session(session), music_list=music_list)
     
 @app.route('/profile', methods=['GET'])
 def profile_page():
