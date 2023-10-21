@@ -181,6 +181,13 @@ def settings_page():
     else:
         return render_template('settings.html', user=obtain_user_from_session(session))
 
+@app.route('/play', methods=['GET'])
+def play_page():
+    session = obtain_session(request)
+    if (not validate_session(session)):
+        return redirect('login')
+    else:
+        return render_template('play.html', user=obtain_user_from_session(session))
 
 # --- APIs ---
 
