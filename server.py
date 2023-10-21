@@ -181,6 +181,13 @@ def settings_page():
     else:
         return render_template('settings.html', user=obtain_user_from_session(session))
 
+@app.route('/play', methods=['GET'])
+def play_page():
+    session = obtain_session(request)
+    if (not validate_session(session)):
+        return redirect('login')
+    else:
+        return render_template('play.html', user=obtain_user_from_session(session))
 
 # --- APIs ---
 
@@ -200,6 +207,72 @@ def logout_api():
         # Logout
         mongo.db.sessions.delete_one({'_id': oid2})
     return redirect('/login')
+
+
+
+@app.route('/api/scores', methods=['POST'])
+def add_scores():
+    # Get the score to add or remove
+    score = request.get_json()
+    score_id = score['musicID']
+    score_type = score['status']
+
+    session = obtain_session(request)
+
+
+    # If we find an expired or nonexisting session
+    if (not validate_session(session)):
+        return {
+            "success": 0,
+            "message": "session invalid"
+        }, 401
+    else:
+        if score_type == null:
+            return {
+                "success": 0,
+                "message": "score type was null"
+            }, 401
+        
+        # retrieve the list to update
+        user = obtain_user_from_session(session)
+        score_list = user[score_type]
+
+        # Remove the score from the all
+        if score_id in user["working_on"]:
+            user["working_on"].remove(score_id)
+        if score_id in user["planned"]:
+            user["planned"].remove(score_id)
+        if score_id in user["mastered"]:
+            user["mastered"].remove(score_id)
+
+        # Append the score to the appropriate list
+        score_list.append(score_id)
+
+        return {
+            "success": 1,
+            "message": "score added"
+        }, 200
+
+
+@app.route('/api/music', methods=['GET'])
+def music_api():
+    # Get the score 
+    music_id = request.args.get('id')
+    object_music = ObjectID(music_id)
+    
+    session = obtain_session(request)
+
+    if (not validate_session(session)):
+        return {
+            "success": 0,
+            "message": "session invalid"
+        }, 401
+    else:
+        music = list(mongo.db.find({'_id': object_music}))[0]
+        return {
+            "success": 1,
+            "music-data": music
+        }, 200
 
 # --- Helper Function ---
 
@@ -224,5 +297,3 @@ def obtain_user_from_session(session):
     """
     object_id = ObjectId(session[0]['user'])
     return list(mongo.db.users.find({'_id': object_id}))[0]
-
-

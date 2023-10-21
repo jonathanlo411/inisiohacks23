@@ -5,12 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/master.css')}}">
+    <script src="https://unpkg.com/vextab@3.0.6/releases/vextab-div.js" defer></script>
+    <script src="https://rawcdn.githack.com/0xfe/vextab/e155190c20b76be9cd5c6afbc80bc837d944cef1/releases/div.prod.js?min=1" defer></script>
+    <script src="{{url_for('static', filename='js/play.js')}}" defer></script>
 </head>
 <body>
     {% extends 'nav.html' %}
     {% block content %}
 
-    
+    <div id="sheet-wrapper">
+        <div class="vexbox">
+            <div class="sheet" id="pageOne"></div>
+        </div>
+        <div class="vexbox">
+            <div class="sheet" id="pageTwo"></div>
+        </div>
+    </div>
 
     {% endblock %}    
 </body>
