@@ -217,17 +217,11 @@ def add_scores():
     score_id = score['musicID']
     score_type = score['status']
 
-    # Get cookie for authorization
-    privilege = request.cookies.get('auth')
+    session = obtain_session(request)
 
-    # Change to ObjectID typing
-    oid2 = ObjectId(privilege)
-
-    # Check if there is active session
-    check = list(mongo.db.sessions.find({'_id': oid2}))
 
     # If we find an expired or nonexisting session
-    if (len(check) != 1 or int(datetime.now().timestamp()) >= check[0]['active_time']):
+    if (not validate_session(session)):
         return {
             "success": 0,
             "message": "session invalid"
@@ -240,17 +234,16 @@ def add_scores():
             }, 401
         
         # retrieve the list to update
-        object_id = ObjectId(check[0]['user'])
-        user = list(mongo.db.users.find({'_id': object_id}))
-        score_list = user[0][score_type]
+        user = obtain_user_from_session(session)
+        score_list = user[score_type]
 
         # Remove the score from the all
-        if score_id in user[0]["working_on"]:
-            user[0]["working_on"].remove(score_id)
-        if score_id in user[0]["planned"]:
-            user[0]["planned"].remove(score_id)
-        if score_id in user[0]["mastered"]:
-            user[0]["mastered"].remove(score_id)
+        if score_id in user["working_on"]:
+            user["working_on"].remove(score_id)
+        if score_id in user["planned"]:
+            user["planned"].remove(score_id)
+        if score_id in user["mastered"]:
+            user["mastered"].remove(score_id)
 
         # Append the score to the appropriate list
         score_list.append(score_id)
@@ -262,24 +255,24 @@ def add_scores():
 
 
 @app.route('/api/music', methods=['GET'])
-def logout_api():
+def music_api():
     # Get the score 
-    music_id = request.get_json();
-    # Get cookie for authorization
-    privilege = request.cookies.get('auth')
+    music_id = request.args.get('id')
+    object_music = ObjectID(music_id)
+    
+    session = obtain_session(request)
 
-    # Change to ObjectID typing
-    oid2 = ObjectId(privilege)
-
-    # Check if there is active session
-    check = list(mongo.db.sessions.find({'_id': oid2}))
-
-    # If we find a logged in session
-    if (len(check) == 1):
-        # Logout
-        mongo.db.sessions.delete_one({'_id': oid2})
-    return redirect('/login')
-
+    if (not validate_session(session)):
+        return {
+            "success": 0,
+            "message": "session invalid"
+        }, 401
+    else:
+        music = list(mongo.db.find({'_id': object_music}))[0]
+        return {
+            "success": 1,
+            "music-data": music
+        }, 200
 
 # --- Helper Function ---
 
