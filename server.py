@@ -81,3 +81,7 @@ def login_page():
                 }, 401
     else:
         return render_template('login.html')
+    
+@app.route('/signup', methods=['GET', 'POST'])
+def signup_page():
+    return render_template("signup.html")
