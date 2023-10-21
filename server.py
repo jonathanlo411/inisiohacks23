@@ -121,7 +121,7 @@ def signup_page():
             hashed_pass = pass_hash.hexdigest()
 
             # Insert new account
-            user_db.insert_one({'username': username,'display_name': display_name, 'password': hashed_pass})
+            user_db.insert_one({'username': username,'display_name': display_name, 'password': hashed_pass, 'working_on': [], 'planned': [], 'mastered': []})
 
             # Return that account made was success
             return {
@@ -159,5 +159,26 @@ def dashboard_page():
     #print(check[0]['active_time'], flush=True)
     if (len(check) != 1 or int(datetime.now().timestamp()) >= check[0]['active_time']):
         return redirect('login')
-    else: 
-        return render_template('dashboard.html')
+    else:
+        object_id = ObjectId(check[0]['user'])
+        user = list(mongo.db.users.find({'_id': object_id}))
+        # user_music = [user[0]['working_on'], user[0]['planned'], user[0]['mastered']]
+        # print(user_music, flush=True)
+        return render_template('dashboard.html', user = user)
+
+@app.route('/api/logout', methods=['GET']) # THIS IS A POST REQUEST
+def logout_api():
+    # Get cookie for authorization
+    privilege = request.cookies.get('auth')
+
+    # Change to ObjectID typing
+    oid2 = ObjectId(privilege)
+
+    # Check if there is active session
+    check = list(mongo.db.sessions.find({'_id': oid2}))
+
+    # If we find a logged in session
+    if (len(check) == 1):
+        # Logout
+        mongo.db.sessions.delete_one([{'_id': oid2}])
+    return redirect('login')
