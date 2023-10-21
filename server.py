@@ -133,7 +133,7 @@ def dashboard_page():
 
     # Check if there is active session
     check = list(mongo.db.sessions.find({'_id': oid2})) 
-    print(check[0]['active_time'], flush=True)
+    #print(check[0]['active_time'], flush=True)
     if (len(check) != 1 or int(datetime.now().timestamp()) >= check[0]['active_time']):
         return redirect('login')
     else: 
