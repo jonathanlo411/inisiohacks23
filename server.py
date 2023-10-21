@@ -258,7 +258,7 @@ def add_scores():
 def music_api():
     # Get the score 
     music_id = request.args.get('id')
-    object_music = ObjectID(music_id)
+    object_music = ObjectId(music_id)
     
     session = obtain_session(request)
 
@@ -268,10 +268,11 @@ def music_api():
             "message": "session invalid"
         }, 401
     else:
-        music = list(mongo.db.find({'_id': object_music}))[0]
+        music = list(mongo.db.musicScores.find({'_id': object_music}))[0]
         return {
             "success": 1,
-            "music-data": music
+            "music-data": music['music'],
+            "score-name": music['name']
         }, 200
 
 # --- Helper Function ---
