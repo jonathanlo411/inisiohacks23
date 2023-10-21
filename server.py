@@ -141,27 +141,45 @@ def signup_page():
         else: 
             return redirect('dashboard')
 
-
-@app.route('/dashboard', methods=['GET','POST'])
+@app.route('/dashboard', methods=['GET'])
 def dashboard_page():
-    # Get cookie for authorization
-    privilege = request.cookies.get('auth')
-
-    # Change to ObjectID typing
-    oid2 = ObjectId(privilege)
-
-    # Check if there is active session
-    check = list(mongo.db.sessions.find({'_id': oid2}))
-
-    #print(check[0]['active_time'], flush=True)
-    if (len(check) != 1 or int(datetime.now().timestamp()) >= check[0]['active_time']):
+    session = obtain_session(request)
+    if (not validate_session(session)):
         return redirect('login')
     else:
-        object_id = ObjectId(check[0]['user'])
-        user = list(mongo.db.users.find({'_id': object_id}))
-        # user_music = [user[0]['working_on'], user[0]['planned'], user[0]['mastered']]
-        # print(user_music, flush=True)
-        return render_template('dashboard.html', user = user[0])
+        return render_template('dashboard.html', user=obtain_user_from_session(session))
+    
+@app.route('/scores', methods=['GET'])
+def scores_page():
+    session = obtain_session(request)
+    if (not validate_session(session)):
+        return redirect('login')
+    else:
+        return render_template('scores.html', user=obtain_user_from_session(session))
+    
+@app.route('/explore', methods=['GET'])
+def explore_page():
+    session = obtain_session(request)
+    if (not validate_session(session)):
+        return redirect('login')
+    else:
+        return render_template('explore.html', user=obtain_user_from_session(session))
+    
+@app.route('/profile', methods=['GET'])
+def profile_page():
+    session = obtain_session(request)
+    if (not validate_session(session)):
+        return redirect('login')
+    else:
+        return render_template('profile.html', user=obtain_user_from_session(session))
+    
+@app.route('/settings', methods=['GET'])
+def settings_page():
+    session = obtain_session(request)
+    if (not validate_session(session)):
+        return redirect('login')
+    else:
+        return render_template('settings.html', user=obtain_user_from_session(session))
 
 
 # --- APIs ---
@@ -182,3 +200,29 @@ def logout_api():
         # Logout
         mongo.db.sessions.delete_one({'_id': oid2})
     return redirect('/login')
+
+# --- Helper Function ---
+
+def obtain_session(request):
+    """ Gets the session given the user's request
+    """
+    privilege = request.cookies.get('auth')
+    oid2 = ObjectId(privilege)
+    return list(mongo.db.sessions.find({'_id': oid2}))
+
+def validate_session(session):
+    """ Returns true if valid session 
+    """
+    return not (
+        len(session) != 1
+        or 
+        int(datetime.now().timestamp()) >= session[0]['active_time']
+    )
+
+def obtain_user_from_session(session):
+    """ Obtains the user given the session
+    """
+    object_id = ObjectId(session[0]['user'])
+    return list(mongo.db.users.find({'_id': object_id}))[0]
+
+
