@@ -119,3 +119,8 @@ def signup_page():
         # go to dashboard (if true)
         # else render :)
         return render_template('signup.html')
+
+
+@app.route('/dashboard', methods=['GET'])
+def dashboard_page():
+    return render_template('dashboard.html')
