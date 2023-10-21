@@ -1,8 +1,45 @@
 
-:root {
-    --bg: #CADAFF
+#center {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    justify-content: space-around;
 }
 
-body {
-    background-color: var(--bg);
+h1 {
+    font-weight: 800;
+    font-size: 8vh;
+    margin: 3%;
+}
+
+h4 {
+    font-size: 2rem;
+    font-weight: 700;
+    width: 70%;
+    margin: 0 auto;
+}
+
+#button-sec {
+    margin-top: 10vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#button-sec > button {
+    background-color: var(--highlight);
+    font-size: 1.25rem;
+    border-radius: 100px;
+    font-weight: 600;
+    padding: 1% 3%;
+    width: 20%;
+    margin: .5%;
+    transition: 0.3s;
+}
+#button-sec > button:hover {
+    cursor: pointer;
+    background-color: var(--highlight-darken);
 }
