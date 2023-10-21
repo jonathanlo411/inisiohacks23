@@ -4,19 +4,24 @@ document.getElementById("submit"),addEventListener("submit", async (e) => {
     // Prevent page from reloading
     e.preventDefault();
 
-    // Obtain user's username and password
+    // Obtain user's information
     let username = document.getElementById("username");
+    let displayName = document.getElementById("displayname");
     let password = document.getElementById("password");
+    let passwordAuth = document.getElementById("password-auth");
 
-    if (username.value == "" || password.value == "") {
-        raiseError("Username or Password Empty")
+    if (username.value == "" || password.value == "" || displayName == "" || passwordAuth == "") {
+        raiseError("One or More Fields Empty")
+    } else if (password.value != passwordAuth.value) {
+        raiseError("Passwords Do Not Match")
     } else {
         // Submit user's information
         const payload = {
             "username": username.value,
-            "password": password.value
+            "password": password.value,
+            "displayName": displayName.value
         }
-        let res = await fetch("/login", {
+        let res = await fetch("/signup", {
             method: "POST",
             credentials: "same-origin",
             body: JSON.stringify(payload),
@@ -34,7 +39,6 @@ document.getElementById("submit"),addEventListener("submit", async (e) => {
 
 // Loads error onto user's DOM
 function raiseError(msg) {
-    console.log("here")
     let errorTarget = document.getElementById("error-box")
     errorTarget.innerHTML = msg;
     errorTarget.style.display = "block";

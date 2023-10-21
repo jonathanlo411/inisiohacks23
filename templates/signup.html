@@ -6,20 +6,24 @@
     <title>Document</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/master.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/login.css')}}">
-    <script src="{{url_for('static', filename='js/login.js')}}" defer></script>
+    <script src="{{url_for('static', filename='js/signup.js')}}" defer></script>
 </head>
 <body>
     <div id="center">
         <div id="box">
             <span>Unlock your musical potential!</span>
-            <form action="/login">
+            <form action="/signup">
+                <label>Display Name</label>
+                <input id="displayname" name="username" type="text">
                 <label>Username</label>
                 <input id="username" name="username" type="text">
                 <label>Password</label>
                 <input id="password" name="password" type="password">
-                <button id="submit">Login</button>
+                <label>Repeat Password</label>
+                <input id="password-auth" name="password" type="password">
+                <button id="submit">Sign Up</button>
             </form>
-            <p>Don't have an account yet? <a href="/signup">Sign Up</a></p>
+            <p>Already have an account? <a href="/login">Login</a></p>
         </div>
     </div>
     <div id="error"><div id="error-box">Username or Password Incorrect</div></div>
