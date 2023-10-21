@@ -161,7 +161,7 @@ def dashboard_page():
         user = list(mongo.db.users.find({'_id': object_id}))
         # user_music = [user[0]['working_on'], user[0]['planned'], user[0]['mastered']]
         # print(user_music, flush=True)
-        return render_template('dashboard.html', user = user)
+        return render_template('dashboard.html', user = user[0])
 
 
 # --- APIs ---
