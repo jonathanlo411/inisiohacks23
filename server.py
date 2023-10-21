@@ -3,6 +3,7 @@ import hashlib as hash
 from flask_pymongo import PyMongo
 import os
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
 
 # Setup
 app = Flask(__name__)
@@ -16,19 +17,22 @@ mongo = PyMongo(app)
 @app.route('/', methods=['GET'])
 def landing_page():
     # Make sure to remove this. Temp for testing
+
     # Hashing for password
-    m =hash.sha256()
-    m.update(b"qwefjha")
-    a = m.hexdigest()
-    temp = mongo.db.users
+    #pass_hash =hash.sha256()
+    #pass_hash.update(b"qwefjha")
+    #hashed_pass = pass_hash.hexdigest()
+    #user_db = mongo.db.users
 
     # Makes sure no duplicate usernames
-    temp.create_index('username', unique=True)
-    temp_user = temp.find({'username':'jolo'})
-    if (temp_user[0]['username'] == 'jolo'):
-        print("wow", flush=True)
-    else:
-        temp.insert_one({'username':'jolo','display_name':'jolo', 'password':a})
+    #user_db.create_index('username', unique=True)
+    #temp_user = user_db.find({'username':'jolo'})
+    #if (temp_user[0]['username'] == 'jolo'):
+    #    print("Need to put error here", flush=True)
+    #else:
+    #    temp.insert_one({'username':'jolo','display_name':'jolo', 'password':hashed_pass})
+
+
     return render_template('index.html')
 
 
@@ -37,26 +41,43 @@ def landing_page():
 def login_page():
     if request.method == 'POST':
         user_input = request.get_json()
-        temp = mongo.db.users
-        user_input = request.form
+        #print(user_input, flush=True)
+        user_db = mongo.db.users
         username = user_input['username']
         password = user_input['password']
-        print(username, password, flush=True)
+        #print(username, password, flush=True)
 
         # Check user exists in DB
-        temp_user = list(temp.find({'username': username}))
-        if (len(temp_user) != 1):
-            print("failed nerd", flush=True)
+        user_check = list(user_db.find({'username': username}))
+        #print(user_check, flush=True)
+        if (len(user_check) != 1):
+            return {
+                "success": 0,
+                "message": "Wrong Username"
+            }, 401
         else:
             # Check if user pass matches password
-            m =hash.sha256()
-            m.update(password.encode('ascii'))
-            a = m.hexdigest()
-            if (temp_user[0]['password'] == a):
+            pass_hash =hash.sha256()
+            pass_hash.update(password.encode('ascii'))
+            hashed_pass = pass_hash.hexdigest()
+            if (user_check[0]['password'] == hashed_pass):
+                # Create user session
+                # Store user _id, expire time (need library)
+                # Send _id of session
+                active_time = int((datetime.now() + timedelta(days=7)).timestamp())
+                mongo.db.sessions.insert_one({'user': str(user_check[0]['_id']), 'active_time': active_time})
+                curr_user = list(mongo.db.sessions.find({'user': str(user_check[0]['_id']), 'active_time': active_time}))
+                print(str(curr_user[0]['_id']), flush=True)
+                return {
+                    "success": 1,
+                    "cookie": str(curr_user[0]['_id'])
+                }, 200
+
                 # Redirect if good else error if wrong
-                print("real", flush=True)
             else:
-                print("failed p2", flush=True)
-        return render_template('login.html')
+                return {
+                    "success": 0,
+                    "message": "Wrong Password"
+                }, 401
     else:
         return render_template('login.html')
