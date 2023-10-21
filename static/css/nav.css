@@ -61,15 +61,15 @@ nav {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.5% 1.5%;
+    padding: 0.5% 2%;
     display: none;
 }
 #profile-pfp {
-    height: 10vh;
-    width: 10vh;
+    height: 7vw;
+    width: 7vw;
     background-position: center;
     background-size: cover;
-    border-radius: 100px;
+    border-radius: 10vw;
     margin: auto;
 }
 #profile-info {
@@ -81,7 +81,7 @@ nav {
 #profile-info > * {
     width: 100%;
     text-align: center;
-    margin: 3%;
+    margin: 5%;
 }
 #profile-info > hr {
     width: 100%;
