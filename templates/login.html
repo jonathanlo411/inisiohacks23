@@ -11,15 +11,18 @@
 <body>
     <div id="center">
         <div id="box">
-            <h4>Unlock your musical potential!</h4>
-            <form action="/login" method="POST">
+            <span>Unlock your musical potential!</span>
+            <form action="/login">
                 <label>Username</label>
-                <input name="username" type="text">
+                <input id="username" name="username" type="text">
                 <label>Password</label>
-                <input name="password" type="password">
-                <button type="submit">Log In</button>
+                <input id="password" name="password" type="password">
+                <button id="submit" type="submit">Log In</button>
             </form>
+            <p>Don't have an account yet? <a href="/signup">Sign Up</a></p>
         </div>
     </div>
+    <div id="error">
+        <div id="error-box">Username or Password Incorrect</div></div>
 </body>
 </html>
