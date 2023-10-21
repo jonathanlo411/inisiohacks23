@@ -19,10 +19,7 @@ mongo = PyMongo(app)
 # Page Render
 @app.route('/', methods=['GET'])
 def landing_page():
-    context = {
-        "user": "jolo"
-    }
-    return render_template('index.html', context=context)
+    return render_template('index.html')
 
 
 
@@ -166,7 +163,10 @@ def dashboard_page():
         # print(user_music, flush=True)
         return render_template('dashboard.html', user = user)
 
-@app.route('/api/logout', methods=['GET']) # THIS IS A POST REQUEST
+
+# --- APIs ---
+
+@app.route('/api/logout', methods=['POST']) # THIS IS A POST REQUEST
 def logout_api():
     # Get cookie for authorization
     privilege = request.cookies.get('auth')
@@ -180,5 +180,5 @@ def logout_api():
     # If we find a logged in session
     if (len(check) == 1):
         # Logout
-        mongo.db.sessions.delete_one([{'_id': oid2}])
-    return redirect('login')
+        mongo.db.sessions.delete_one({'_id': oid2})
+    return redirect('/login')
