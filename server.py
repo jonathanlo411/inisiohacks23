@@ -182,3 +182,55 @@ def logout_api():
         # Logout
         mongo.db.sessions.delete_one({'_id': oid2})
     return redirect('/login')
+
+
+@app.route('/api/scores', methods=['POST'])
+def add_scores():
+    # Get the score to add or remove
+    if request.method == 'POST':
+        score = request.get_json()
+        score_id = score['musicID']
+        score_type = score['status']
+
+        # Get cookie for authorization
+        privilege = request.cookies.get('auth')
+
+        # Change to ObjectID typing
+        oid2 = ObjectId(privilege)
+
+        # Check if there is active session
+        check = list(mongo.db.sessions.find({'_id': oid2}))
+
+        # If we find an expired or nonexisting session
+        if (len(check) != 1 or int(datetime.now().timestamp()) >= check[0]['active_time']):
+            return {
+                "success": 0,
+                "message": "session invalid"
+            }, 401
+        else:
+            if score_type == null:
+                return {
+                    "success": 0,
+                    "message": "score type was null"
+                }, 401
+            
+            # retrieve the list to update
+            object_id = ObjectId(check[0]['user'])
+            user = list(mongo.db.users.find({'_id': object_id}))
+            score_list = user[0][score_type]
+
+            # Remove the score from the all
+            if score_id in user[0]["working_on"]:
+                user[0]["working_on"].remove(score_id)
+            if score_id in user[0]["planned"]:
+                user[0]["planned"].remove(score_id)
+            if score_id in user[0]["mastered"]:
+                user[0]["mastered"].remove(score_id)
+
+            # Append the score to the appropriate list
+            score_list.append(score_id)
+
+            return {
+                "success": 1,
+                "message": "score added"
+            }, 200
