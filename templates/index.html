@@ -4,8 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='master.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
 </head>
 <body>
-    Hello world
+    <div id="center">
+        <div>
+        <h1>Welcome to MuseWizard</h1>
+        <h4>Join others and unlock your unlock your musical potential with MuzeWizard: Where Notes Become Progress!</h4>
+        <div id="button-sec">
+            <button onclick="location.href='/login'">Explore</button>
+            <button onclick="location.href='/about'">Learn More</button>
+        </div>
+        </div>
+    </div>
 </body>
 </html>
