@@ -5,7 +5,9 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 
+
 # Setup
+load_dotenv()
 app = Flask(__name__)
 app.config["MONGO_URI"] = os.getenv('MONGO_URI')
 MONGO_URI = os.getenv('MONGO_URI')
@@ -117,4 +119,3 @@ def signup_page():
         # go to dashboard (if true)
         # else render :)
         return render_template('signup.html')
-
