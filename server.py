@@ -69,10 +69,20 @@ def login_page():
                     "message": "Wrong Password"
                 }, 401
     else:
-        # if user has cookie for session that valid
-        # go to dashboard (if true)
-        # else render :)
-        return render_template('login.html')
+        # Get cookie for authorization
+        privilege = request.cookies.get('auth')
+
+        # Change to ObjectID typing
+        oid2 = ObjectId(privilege)
+
+        # Check if there is active session
+        check = list(mongo.db.sessions.find({'_id': oid2}))
+        
+        #print(check[0]['active_time'], flush=True)
+        if (len(check) != 1 or int(datetime.now().timestamp()) >= check[0]['active_time']):
+            return render_template('login.html')
+        else: 
+            return redirect('dashboard')
     
 @app.route('/signup', methods=['GET', 'POST'])
 def signup_page():
@@ -116,10 +126,20 @@ def signup_page():
                 "message": "Account Made :)"
             }, 200
     else:
-        # if user has cookie for session that valid
-        # go to dashboard (if true)
-        # else render :)
-        return render_template('signup.html')
+        # Get cookie for authorization
+        privilege = request.cookies.get('auth')
+
+        # Change to ObjectID typing
+        oid2 = ObjectId(privilege)
+
+        # Check if there is active session
+        check = list(mongo.db.sessions.find({'_id': oid2}))
+        
+        #print(check[0]['active_time'], flush=True)
+        if (len(check) != 1 or int(datetime.now().timestamp()) >= check[0]['active_time']):
+            return render_template('signup.html')
+        else: 
+            return redirect('dashboard')
 
 
 @app.route('/dashboard', methods=['GET','POST'])
@@ -130,9 +150,9 @@ def dashboard_page():
     # Change to ObjectID typing
     oid2 = ObjectId(privilege)
 
-
     # Check if there is active session
-    check = list(mongo.db.sessions.find({'_id': oid2})) 
+    check = list(mongo.db.sessions.find({'_id': oid2}))
+
     #print(check[0]['active_time'], flush=True)
     if (len(check) != 1 or int(datetime.now().timestamp()) >= check[0]['active_time']):
         return redirect('login')
