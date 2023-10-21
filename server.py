@@ -1,9 +1,10 @@
-from flask import Flask, request, render_template, make_response
+from flask import Flask, request, render_template, redirect
 import hashlib as hash
 from flask_pymongo import PyMongo
 import os
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
+from bson import ObjectId
 
 
 # Setup
@@ -121,6 +122,19 @@ def signup_page():
         return render_template('signup.html')
 
 
-@app.route('/dashboard', methods=['GET'])
+@app.route('/dashboard', methods=['GET','POST'])
 def dashboard_page():
-    return render_template('dashboard.html')
+    # Get cookie for authorization
+    privilege = request.cookies.get('auth')
+
+    # Change to ObjectID typing
+    oid2 = ObjectId(privilege)
+
+
+    # Check if there is active session
+    check = list(mongo.db.sessions.find({'_id': oid2})) 
+    print(check[0]['active_time'], flush=True)
+    if (len(check) != 1 or int(datetime.now().timestamp()) >= check[0]['active_time']):
+        return redirect('login')
+    else: 
+        return render_template('dashboard.html')
