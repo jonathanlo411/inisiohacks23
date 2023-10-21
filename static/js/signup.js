@@ -31,7 +31,7 @@ document.getElementById("submit"),addEventListener("submit", async (e) => {
 
         // Handle User Submissions
         if (data.success) {
-            // Redirect to dashboard
+            location.href = '/login'
         } else {
             raiseError((data.message) ? data.message : "Something went wrong!")
             console.log(res)

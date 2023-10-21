@@ -26,7 +26,11 @@ document.getElementById("submit"),addEventListener("submit", async (e) => {
 
         // Handle User Submissions
         if (data.success) {
-            // Redirect to dashboard
+            // Set auth and redirect to dashboard
+            let currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() + 7);
+            document.cookie = `auth=${data.cookie}; expires=${currentDate.toDateString()}`
+            location.href = '/dashboard'
         } else {
             raiseError((data.message) ? data.message : "Something went wrong!")
             console.log(res)

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/master.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/dashboard.css')}}">
+    <script src="{{url_for('static', filename='js/dashboard.js')}}" defer></script>
+</head>
+<body>
+    {% extends 'nav.html' %}
+    {% block content %}
+
+    <div id="welcome">
+        <h1 id="welcome-msg"> {{ user.display_name }}.</h1>
+        <h4 id="subhead-msg">Here are some things that may require your attention.</h4>
+    </div>
+
+    <section class="dashboard-section" id="music-scores">
+        <h3>Your Music Scores</h3>
+        {% if user.working_on|length > 0 %}
+        <div id="music-scores-grid">
+            {% for score_id in user.working_on %}
+            <div class="music-card">
+                <img src="https://www.francescoparrinomusic.com/wp-content/uploads/Hallelujah-Sheet-Music-Piano-Solo-in-C-Major.png">
+                <div class="card-info">
+                    <h2>Piano Man</h2>
+                    <h5>Progress: 3/10</h5>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <h2 id="empty-msg">No Music Scores being Worked On. <a href="/explore">Explore Scores</a>!</h2>
+        {% endif %}
+    </section>
+
+    <section class="dashboard-section" id="analytics">
+        <h3>Your Practice Digest</h3>
+        <div id="graphs">
+
+        </div>
+    </section>
+
+    {% endblock %}    
+</body>
+</html>
