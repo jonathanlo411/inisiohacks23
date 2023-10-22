@@ -17,7 +17,7 @@
         <h1 id="welcome-msg">  {{ user.display_name }}.</h1>
         <h4 id="subhead-msg">Here are some things that may require your attention.</h4>
     </div>
-
+    
     {% import 'modal.html' as modal %}
     <section class="dashboard-section" id="music-scores">
         
@@ -25,17 +25,16 @@
         {% if user.working_on|length > 0 %}
         <div id="music-scores-grid">
             {% for score_id in user.working_on %}
-            <div class="music-card" id="music-card-{{ score_id }}">
-                <img src="https://www.francescoparrinomusic.com/wp-content/uploads/Hallelujah-Sheet-Music-Piano-Solo-in-C-Major.png">
-                <div class="card-info">
-                    <h2>Piano Man</h2>
-                    <h5>Progress: 3/10</h5>
+                {% set found_music = musics|selectattr("_id", "equalto", score_id)|list %}
+                <div class="music-card" id="music-card-{{ score_id }}">
+                    <img src="https://www.francescoparrinomusic.com/wp-content/uploads/Hallelujah-Sheet-Music-Piano-Solo-in-C-Major.png">
+                    <div class="card-info">
+                        <h2>{{ found_music[0]['name'] }}</h2>
+                        <h5>Upvotes: {{ found_music[0]['total_votes'] }}</h5>
+                    </div>
                 </div>
-            </div>
-
+                {{ modal.musicModal(found_music[0]) }}
             
-            {{ modal.musicModal(score_id) }}
-
             {% endfor %}
         </div>
         {% else %}
