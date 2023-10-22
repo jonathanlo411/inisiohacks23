@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/master.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/dashboard.css')}}">
     <script src="{{url_for('static', filename='js/dashboard.js')}}" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </head>
 <body>
     {% extends 'nav.html' %}
@@ -48,7 +49,37 @@
     <section class="dashboard-section" id="analytics">
         <h3>Your Practice Digest</h3>
         <div id="graphs">
+            <canvas id="test-chart"></canvas>
+            <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
 
+            <script>
+                var xValues = ["Working On", "Planned", "Mastered"];
+                var yValues = [{{user['working_on']|length}},
+                                {{user['planned']|length}},
+                                {{user['mastered']|length}}];
+                var barColors = [
+                "#b91d47",
+                "#00aba9",
+                "#2b5797"
+                ];
+                
+                new Chart("myChart", {
+                type: "doughnut",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                    backgroundColor: barColors,
+                    data: yValues
+                    }]
+                },
+                options: {
+                    title: {
+                    display: true,
+                    text: "Sheet Progress"
+                    }
+                }
+                });
+            </script>
         </div>
     </section>
 

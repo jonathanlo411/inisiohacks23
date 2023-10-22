@@ -121,7 +121,9 @@ def signup_page():
             hashed_pass = pass_hash.hexdigest()
 
             # Insert new account
-            user_db.insert_one({'username': username,'display_name': display_name, 'password': hashed_pass, 'working_on': [], 'planned': [], 'mastered': []})
+            user_db.insert_one({'username': username,'display_name': display_name, 
+                                'password': hashed_pass, 'working_on': [], 
+                                'planned': [], 'mastered': [], 'liked': []})
 
             # Return that account made was success
             return {
@@ -144,13 +146,60 @@ def signup_page():
         else: 
             return redirect('dashboard')
 
+# Sets votes for rating
+@app.route('/api/votes', methods=['POST'])
+def vote_setter():
+
+    # Checks if User is valid/ who user is
+    session = obtain_session(request)
+    if (not validate_session(session)):
+        # Return error here
+        return {
+            "success": 0,
+            "message": "Not authorized"
+        }, 401
+
+    else:
+        # Get music voted for and whether they upvoted
+        user_input = request.get_json()
+        if_upvoted = user_input['upvote']
+        music_score = user_input['musicID']
+        # Get music from music id
+        music_oid = ObjectId(music_score)
+        music = list(mongo.db.musicScores.find({'_id': music_oid}))[0]
+
+        # Get user from session
+        user=obtain_user_from_session(session)
+        if (len(user['liked'][str(music_score)]) == 1):
+            # User already voted
+            if (not(if_upvoted == user['liked'][str(music_score)])):
+                # Check if they changed vote
+                if (if_upvoted):
+                    music['upvotes'] += 1
+                else: 
+                    music['upvotes'] -= 1
+                user['liked'][str(music_score)] = if_upvoted
+        else: 
+            # Newly voted user
+            music['total_votes'] += 1
+            if (if_upvoted):
+                music['upvotes'] += 1
+            user['liked'][str(music_score)] = if_upvoted
+        return {
+            "success": 1,
+            "message": "Success"
+        }, 200
+
+
 @app.route('/dashboard', methods=['GET'])
 def dashboard_page():
     session = obtain_session(request)
     if (not validate_session(session)):
         return redirect('login')
     else:
-        return render_template('dashboard.html', user=obtain_user_from_session(session))
+        user = obtain_user_from_session(session)
+        musics = obtain_all_musics()
+        return render_template('dashboard.html', user=user, musics=musics)
     
 @app.route('/scores', methods=['GET'])
 def scores_page():
@@ -158,7 +207,9 @@ def scores_page():
     if (not validate_session(session)):
         return redirect('login')
     else:
-        return render_template('scores.html', user=obtain_user_from_session(session))
+        user = obtain_user_from_session(session)
+        musics = obtain_all_musics()
+        return render_template('scores.html', user=user, musics=musics)
     
 @app.route('/explore', methods=['GET'])
 def explore_page():
@@ -166,7 +217,9 @@ def explore_page():
     if (not validate_session(session)):
         return redirect('login')
     else:
-        return render_template('explore.html', user=obtain_user_from_session(session))
+        user = obtain_user_from_session(session)
+        musics = obtain_all_musics()
+        return render_template('explore.html', user=user, musics=musics)
     
 @app.route('/profile', methods=['GET'])
 def profile_page():
@@ -317,3 +370,11 @@ def obtain_user_from_session(session):
     """
     object_id = ObjectId(session[0]['user'])
     return list(mongo.db.users.find({'_id': object_id}))[0]
+
+def obtain_all_musics():
+    """ Obtains all musics from db
+    """
+    musics = list(mongo.db.musicScores.find({}))
+    for i in musics:
+        i['_id'] = str(i['_id'])
+    return musics
