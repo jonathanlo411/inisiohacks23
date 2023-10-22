@@ -123,7 +123,7 @@ def signup_page():
             # Insert new account
             user_db.insert_one({'username': username,'display_name': display_name, 
                                 'password': hashed_pass, 'working_on': [], 
-                                'planned': [], 'mastered': [], 'liked': []})
+                                'planned': [], 'mastered': [], 'liked': {}})
 
             # Return that account made was success
             return {

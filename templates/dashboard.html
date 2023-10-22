@@ -15,13 +15,12 @@
     {% block content %}
 
     <div id="welcome">
-        <h1 id="welcome-msg">  {{ user.display_name }}.</h1>
+        <h1 id="welcome-msg">{{ user.display_name }},</h1>
         <h4 id="subhead-msg">Here are some things that may require your attention.</h4>
     </div>
-    
+
     {% import 'modal.html' as modal %}
     <section class="dashboard-section" id="music-scores">
-        
         <h3>Your Music Scores</h3>
         {% if user.working_on|length > 0 %}
         <div id="music-scores-grid">
@@ -39,31 +38,29 @@
             {% endfor %}
         </div>
         {% else %}
-        <div id="warn-msg">
-            <h2 id="empty-msg">No Music Scores being Worked On!</h2>
-            <a id="warn-msg-redirect" href="/explore">Explore Scores</a>
-        </div>
+            <h2 id="empty-msg">No Music Scores being Worked On! <a href="/explore">Explore Scores</a>.</h2>
         {% endif %}
     </section>
 
     <section class="dashboard-section" id="analytics">
         <h3>Your Practice Digest</h3>
         <div id="graphs">
-            <canvas id="test-chart"></canvas>
-            <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-
-            <script>
-                var xValues = ["Working On", "Planned", "Mastered"];
-                var yValues = [{{user['working_on']|length}},
-                                {{user['planned']|length}},
-                                {{user['mastered']|length}}];
-                var barColors = [
-                "#b91d47",
-                "#00aba9",
-                "#2b5797"
-                ];
-                
-                new Chart("myChart", {
+            <canvas id="pie-chart"></canvas>
+            <canvas id="tester"></canvas>
+        </div>
+        <script>
+            const ctx1 = document.getElementById("pie-chart").getContext("2d");
+            var xValues = ["Working On", "Planned", "Mastered"];
+            var yValues = [{{user['working_on']|length}},
+                            {{user['planned']|length}},
+                            {{user['mastered']|length}}];
+            var barColors = [
+            "#b91d47",
+            "#00aba9",
+            "#2b5797"
+            ];
+            
+            new Chart(ctx1, {
                 type: "doughnut",
                 data: {
                     labels: xValues,
@@ -78,9 +75,35 @@
                     text: "Sheet Progress"
                     }
                 }
-                });
-            </script>
-        </div>
+            });
+        </script>
+        <script>
+            const ctx2 = document.getElementById("tester").getContext("2d");
+            var xValues = ["Mastered/Completed", "Uncompleted"];
+            var yValues = [{{user['mastered']|length}},
+                            {{musics|length -  user['mastered']|length}}];
+            var barColors = [
+            "#00aba9",
+            "#b91d47"
+            ];
+            
+            new Chart(ctx2, {
+            type: "pie",
+            data: {
+                labels: xValues,
+                datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+                }]
+            },
+            options: {
+                title: {
+                display: true,
+                text: "Completion"
+                }
+            }
+            });
+        </script>
     </section>
 
     {% endblock %}    
