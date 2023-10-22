@@ -5,11 +5,15 @@ nav {
     height: 5vh;
     align-items: center;
     justify-content: space-between;
+    z-index: 3;
 }
 
 #logo {
-    height: 4vh;
+    height: 5vh;
     margin: 2vh;
+}
+#logo:hover {
+    cursor: pointer;
 }
 
 #links {
@@ -40,7 +44,7 @@ nav {
 #pfp:hover { cursor: pointer; }
 
 /* Popup */
-#overlay {
+#overlay-pfp {
     display: none;
     position: fixed;
     top: 0;

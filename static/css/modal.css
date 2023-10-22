@@ -1,0 +1,110 @@
+
+.modal-overlay {
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    opacity: 0.5;
+    z-index: 1;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.modal {
+    z-index: 2;
+    display: none;
+    background-color: var(--modal);
+    position: absolute;
+    width: 50%;
+    margin: auto;
+    border: 1px solid black;
+    border-radius: 10px;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+    padding: 2%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modal button {
+    border: 1px solid black;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    transition: 0.3s;
+    background-color: var(--highlight);
+}
+.modal button:hover {
+    cursor: pointer;
+    background-color: var(--highlight-darken);
+}
+
+.modal-left { 
+    display: flex;
+    flex: 2;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.modal-right { 
+    display: flex;
+    flex: 7;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.modal-left > .pfp {
+    height: 23vh;
+    width: 17vh;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.buttons-array {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.buttons-array * {
+    margin: 0.25%;
+    padding: 2% 5%;
+    font-weight: bold;
+}
+.upvotes {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.upvotes button {
+    width: 50%;
+    padding: 1%;    
+}
+.buttons-array > button {
+    width: 100%;
+}
+
+.modal-right h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0.5% 1%;
+}
+.modal-right h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0.5% 1%;
+}
+.modal-right span {
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin: 0.5% 1%;
+}
+.modal-right p {
+    margin: 0.5% 1%;
+    font-size: 0.9rem;
+}

@@ -2,24 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='imgs/logosmall.png')}}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/master.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/play.css')}}">
     <script src="https://unpkg.com/vextab@3.0.6/releases/vextab-div.js" defer></script>
     <script src="https://rawcdn.githack.com/0xfe/vextab/e155190c20b76be9cd5c6afbc80bc837d944cef1/releases/div.prod.js?min=1" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js" integrity="sha512-CeIsOAsgJnmevfCi2C7Zsyy6bQKi43utIjdA87Q0ZY84oDqnI0uwfM9+bKiIkI75lUeI00WG/+uJzOmuHlesMA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer></script>
+    <script src="https://media.twiliocdn.com/sdk/js/sync/releases/0.12.4/twilio-sync.min.js" defer></script>
     <script src="{{url_for('static', filename='js/play.js')}}" defer></script>
 </head>
 <body>
     {% extends 'nav.html' %}
     {% block content %}
 
+    <div class="tips">
+        <h2 id="message">Status: Connecting...</h2>
+    </div>
+    <div class="buttons">
+        <button id="color-btn" class="btn">Change Color</button>
+        <button id="clear-btn" class="btn">Clear</button>
+    </div>
+    <!-- <div id="canvas-wrapper"> -->
+        <canvas class="whiteboard"></canvas>
+    <!-- </div> -->
+
     <div id="sheet-wrapper">
         <div class="vexbox">
-            <div class="sheet" id="pageOne"></div>
+            <div class="sheet" id="pageOne">
+                <h1 id="score-title">Loading...</h1></div>
         </div>
-        <div class="vexbox">
+        <!-- <div class="vexbox">
             <div class="sheet" id="pageTwo"></div>
-        </div>
+        </div> -->
     </div>
 
     {% endblock %}    

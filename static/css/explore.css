@@ -1,8 +1,22 @@
 
 /* Explore Page Header */
 #header {
-    margin: 5vh 0;
+    margin-top: 5vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
 }
+
+#header > input,input:focus {
+    outline: none;
+    padding: 0.5% 1.5%;
+    font-size: 1.75vh;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
 #explore {
     font-weight: 800;
     font-size: 4rem;
@@ -11,6 +25,29 @@
     font-weight: 200;
     font-size: 2rem;
 } */
+
+/* Filter Bar */
+#filters{
+    margin-top: 3vh;
+    display: flex;
+    flex-direction: row;
+    font-weight: 400;
+    font-size: 1.75vh;
+    column-gap: 2rem;
+}
+
+#filters > button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 0.5% 1.75%;
+    color: black;
+}
+
+#filters > button:hover {
+    cursor: pointer;
+}
 
 /* Music Section */
 #music-scores {
@@ -21,6 +58,8 @@
     display: grid;
     grid-template-columns: repeat(5, 19%);
     grid-auto-rows: 1fr;
+    column-gap: 1.5rem;
+    row-gap: 1.5rem;
     justify-content: space-between;
 }
 .music-card {
