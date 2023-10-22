@@ -9,8 +9,11 @@ nav {
 }
 
 #logo {
-    height: 4vh;
+    height: 5vh;
     margin: 2vh;
+}
+#logo:hover {
+    cursor: pointer;
 }
 
 #links {
