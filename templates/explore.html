@@ -12,7 +12,7 @@
 <body>
     {% extends 'nav.html' %}
     {% block content %}
-  
+ 
     <div id="header">
         <h2 id="explore">Explore</h2>
         <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for scores...">
@@ -44,6 +44,26 @@
         </div>
     </section>
 
-    {% endblock %}
+
+    <section id="music-scores">
+        {% if music_list|length > 0 %}
+        <div id="music-scores-grid">
+            <!-- for element in musicScore -->
+            {% for music in music_list %}
+            <div class="music-card">
+                <img src="https://www.francescoparrinomusic.com/wp-content/uploads/Hallelujah-Sheet-Music-Piano-Solo-in-C-Major.png">
+                <div class="card-info">
+                    <h2 id="music-name">{{ music.name }}</h2>
+                    <h5>Progress: 3/10</h5>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <h2 id="empty-explore">No new scores available! <a href="/dashboard">View current scores</a>!</h2>
+        {% endif %}
+    </section>
+
+    {% endblock %}    
 </body>
 </html>
