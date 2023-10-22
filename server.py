@@ -1,10 +1,13 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, jsonify
 import hashlib as hash
 from flask_pymongo import PyMongo
 import os
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 from bson import ObjectId
+from faker import Faker
+from twilio.jwt.access_token import AccessToken
+from twilio.jwt.access_token.grants import SyncGrant
 
 
 # Setup
@@ -12,6 +15,7 @@ load_dotenv()
 app = Flask(__name__)
 app.config["MONGO_URI"] = os.getenv('MONGO_URI')
 MONGO_URI = os.getenv('MONGO_URI')
+fake = Faker()
 
 # Setup MongoDB
 mongo = PyMongo(app)
@@ -276,6 +280,22 @@ def music_api():
             "music-data": music['music'],
             "score-name": music['name']
         }, 200
+    
+@app.route('/api/token')
+def generate_token():
+    # get credentials from environment variables
+    account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+    api_key = os.getenv('TWILIO_API_KEY')
+    api_secret = os.getenv('TWILIO_API_SECRET')
+    sync_service_sid = os.getenv('TWILIO_SYNC_SERVICE_SID', 'default')
+    username = request.args.get('username', fake.user_name())
+
+    # create access token with credentials
+    token = AccessToken(account_sid, api_key, api_secret, identity=username)
+    # create a Sync grant and add to token
+    sync_grant = SyncGrant(sync_service_sid)
+    token.add_grant(sync_grant)
+    return jsonify(identity=username, token=token.to_jwt().decode() if isinstance(token.to_jwt(), bytes) else token.to_jwt())
 
 # --- Helper Function ---
 
