@@ -1,0 +1,119 @@
+
+/* Explore Page Header */
+#header {
+    margin-top: 5vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+}
+
+#header > input,input:focus {
+    outline: none;
+    padding: 0.5% 1.5%;
+    font-size: 1.75vh;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+#explore {
+    font-weight: 800;
+    font-size: 4rem;
+}
+/* #description {
+    font-weight: 200;
+    font-size: 2rem;
+} */
+
+/* Filter Bar */
+#filters{
+    margin-top: 3vh;
+    display: flex;
+    flex-direction: row;
+    font-weight: 400;
+    font-size: 1.75vh;
+    column-gap: 2rem;
+}
+
+#filters > button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 0.5% 1.75%;
+    color: black;
+}
+
+#filters > button:hover {
+    cursor: pointer;
+}
+
+/* Music Section */
+#music-scores {
+    margin: 3vh 0;
+}
+#music-scores-grid {
+    margin: 1% auto;
+    display: grid;
+    grid-template-columns: repeat(5, 19%);
+    grid-auto-rows: 1fr;
+    column-gap: 1.5rem;
+    row-gap: 1.5rem;
+    justify-content: space-between;
+}
+.music-card {
+    background-color: var(--modal);
+    border-radius: 5px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 4% 0.5%;
+    transition: 0.3s;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+.music-card:hover { 
+    cursor: pointer;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+.music-card > img {
+    width: 70%;
+    border-radius: 5px;
+}
+.music-card > .card-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.card-info > h2 {
+    margin-top: 5%;
+    width: 100%;
+}
+.card-info > h5 {
+    font-size: 1rem;
+}
+.card-info > button:hover {
+    cursor: pointer;
+    background-color: var(--highlight-darken);
+}
+#music-name {
+    text-align: center;
+}
+
+#empty-explore {
+    width: 100%;
+    text-align: center;
+    height: 15vh;
+    font-size: 2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#empty-explore a,a:visited {
+    color: blue;
+    margin-left: 0.5rem;
+}
