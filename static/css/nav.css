@@ -41,7 +41,7 @@ nav {
 #pfp:hover { cursor: pointer; }
 
 /* Popup */
-#overlay {
+#overlay-pfp {
     display: none;
     position: fixed;
     top: 0;

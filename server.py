@@ -9,15 +9,12 @@ from faker import Faker
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import SyncGrant
 
-
 # Setup
 load_dotenv()
 app = Flask(__name__)
 app.config["MONGO_URI"] = os.getenv('MONGO_URI')
 MONGO_URI = os.getenv('MONGO_URI')
 fake = Faker()
-
-# Setup MongoDB
 mongo = PyMongo(app)
 
 # Page Render
