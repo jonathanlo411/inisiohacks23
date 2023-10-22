@@ -146,50 +146,6 @@ def signup_page():
         else: 
             return redirect('dashboard')
 
-# Sets votes for rating
-@app.route('/api/votes', methods=['POST'])
-def vote_setter():
-
-    # Checks if User is valid/ who user is
-    session = obtain_session(request)
-    if (not validate_session(session)):
-        # Return error here
-        return {
-            "success": 0,
-            "message": "Not authorized"
-        }, 401
-
-    else:
-        # Get music voted for and whether they upvoted
-        user_input = request.get_json()
-        if_upvoted = user_input['upvote']
-        music_score = user_input['musicID']
-        # Get music from music id
-        music_oid = ObjectId(music_score)
-        music = list(mongo.db.musicScores.find({'_id': music_oid}))[0]
-
-        # Get user from session
-        user=obtain_user_from_session(session)
-        if (len(user['liked'][str(music_score)]) == 1):
-            # User already voted
-            if (not(if_upvoted == user['liked'][str(music_score)])):
-                # Check if they changed vote
-                if (if_upvoted):
-                    music['upvotes'] += 1
-                else: 
-                    music['upvotes'] -= 1
-                user['liked'][str(music_score)] = if_upvoted
-        else: 
-            # Newly voted user
-            music['total_votes'] += 1
-            if (if_upvoted):
-                music['upvotes'] += 1
-            user['liked'][str(music_score)] = if_upvoted
-        return {
-            "success": 1,
-            "message": "Success"
-        }, 200
-
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard_page():
@@ -270,6 +226,8 @@ def logout_api():
 @app.route('/api/scores', methods=['POST'])
 def add_scores():
     # Get the score to add or remove
+    # score contains musicID which has id of song in string form
+    # and status is the status to push to so 'working_on'
     score = request.get_json()
     score_id = score['musicID']
     score_type = score['status']
@@ -284,7 +242,7 @@ def add_scores():
             "message": "session invalid"
         }, 401
     else:
-        if score_type == null:
+        if score_type == None:
             return {
                 "success": 0,
                 "message": "score type was null"
@@ -297,13 +255,17 @@ def add_scores():
         # Remove the score from the all
         if score_id in user["working_on"]:
             user["working_on"].remove(score_id)
+            mongo.db.users.update_one({"_id": user["_id"]},{ "$set": { "working_on": user["working_on"] }});
         if score_id in user["planned"]:
             user["planned"].remove(score_id)
+            mongo.db.users.update_one({"_id": user["_id"]},{ "$set": { "planned": user["planned"] }});
         if score_id in user["mastered"]:
             user["mastered"].remove(score_id)
+            mongo.db.users.update_one({"_id": user["_id"]},{ "$set": { "mastered": user["mastered"] }});
 
         # Append the score to the appropriate list
         score_list.append(score_id)
+        mongo.db.users.update_one({"_id": user["_id"]},{ "$set": { score_type: score_list }});
 
         return {
             "success": 1,
@@ -347,6 +309,60 @@ def generate_token():
     sync_grant = SyncGrant(sync_service_sid)
     token.add_grant(sync_grant)
     return jsonify(identity=username, token=token.to_jwt().decode() if isinstance(token.to_jwt(), bytes) else token.to_jwt())
+
+
+# Sets votes for rating
+@app.route('/api/votes', methods=['POST'])
+def vote_setter():
+
+    # Checks if User is valid/ who user is
+    session = obtain_session(request)
+    if (not validate_session(session)):
+        # Return error here
+        return {
+            "success": 0,
+            "message": "Not authorized"
+        }, 401
+
+    else:
+        # Get music voted for and whether they upvoted
+        user_input = request.get_json()
+        if_upvoted = user_input['upvote']
+        music_score = user_input['musicID']
+        # Get music from music id
+        music_oid = ObjectId(music_score)
+        music = list(mongo.db.musicScores.find({'_id': music_oid}))[0]
+
+        # Get user from session
+        user=obtain_user_from_session(session)
+        if str(music_score) in user['liked']:
+            # User already voted
+            if (not(if_upvoted == user['liked'][str(music_score)])):
+                # Check if they changed vote
+                if (if_upvoted):
+                    #print(user['liked'],"hello", flush=True)
+                    music['upvotes'] += 1
+                else: 
+                    #print(user['liked'],"bye", flush=True)
+                    music['upvotes'] -= 1
+                user['liked'][str(music_score)] = if_upvoted
+                mongo.db.users.update_one({"username": user['username']},{ "$set": { "liked": user['liked'] } })
+                mongo.db.musicScores.update_one({"_id": music_oid},{"$set": { "upvotes": music['upvotes'] } })
+
+        else: 
+            # Newly voted user
+            music['total_votes'] += 1
+            if (if_upvoted):
+                music['upvotes'] += 1
+            user['liked'][str(music_score)] = if_upvoted
+            #print(user['liked'],"hello", flush=True)
+            mongo.db.users.update_one({"username": user['username']},{ "$set": { "liked": user['liked'] } })
+            mongo.db.musicScores.update_one({"_id": music_oid},
+                                {"$set": { "upvotes": music['upvotes'], "total_votes": music['total_votes'] } })
+        return {
+            "success": 1,
+            "message": "Success"
+        }, 200
 
 # --- Helper Function ---
 

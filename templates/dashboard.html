@@ -15,7 +15,7 @@
     {% block content %}
 
     <div id="welcome">
-        <h1 id="welcome-msg">{{ user.display_name }},</h1>
+        <h1 id="welcome-msg">{{ user.display_name }}.</h1>
         <h4 id="subhead-msg">Here are some things that may require your attention.</h4>
     </div>
 
@@ -27,10 +27,10 @@
             {% for score_id in user.working_on %}
                 {% set found_music = musics|selectattr("_id", "equalto", score_id)|list %}
                 <div class="music-card" id="music-card-{{ score_id }}">
-                    <img src="https://www.francescoparrinomusic.com/wp-content/uploads/Hallelujah-Sheet-Music-Piano-Solo-in-C-Major.png">
+                    <img src="https://musescore.com/static/musescore/scoredata/g/1ca52c87a89c2e04b64b21ca9166c6d5a73a484f/score_0.png@280x390?no-cache=1567010808&bgclr=ffffff&fmt=webp&qlt=80">
                     <div class="card-info">
-                        <h2>{{ found_music[0]['name'] }}</h2>
-                        <h5>Upvotes: {{ found_music[0]['total_votes'] }}</h5>
+                        <h2 id="music-name">{{ found_music[0]['name'] }}</h2>
+                        <h5>Total Votes: {{ found_music[0]['total_votes'] }}</h5>
                     </div>
                 </div>
                 {{ modal.musicModal(found_music[0]) }}
@@ -38,7 +38,10 @@
             {% endfor %}
         </div>
         {% else %}
-            <h2 id="empty-msg">No Music Scores being Worked On! <a href="/explore">Explore Scores</a>.</h2>
+        <div id="warn-msg">
+            <h2 id="empty-msg">No Music Scores being Worked On!</h2>
+            <button id="warn-msg-redirect" onclick="location.href='/explore'">Explore Scores</button>
+        </div>
         {% endif %}
     </section>
 

@@ -6,12 +6,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/master.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/scores.css')}}">
+    <script src="{{url_for('static', filename='js/scores.js')}}" defer></script>
 </head>
 <body>
     {% extends 'nav.html' %}
     {% block content %}
-
     
+    {% import 'modal.html' as modal %}
+    <div id="header">
+        <h2 id="explore">My Scores</h2>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for scores...">
+    </div>
+    <h5 id="description">View your list and what you need to work on!</h4>
+    
+    <!-- <nav> -->
+    <div id="filters">
+        <!-- link to recent? -->
+        <button id="all">All</button> 
+        <button id="working-on">Working On</button>
+        <button id="planned">Planned</button>
+        <button id="mastered">Mastered</button>
+    </div>
+    <!-- </nav> -->
+
+    <section id="music-scores">
+        <div id="music-scores-grid">
+            <!-- Working On -->
+            {% for score_id in user.working_on %}
+                {% set music = musics|selectattr("_id", "equalto", score_id)|list %}
+                <div class="music-card cl-ma cl-pln" id="music-card-{{ music[0]['_id'] }}">
+                    <img src="https://musescore.com/static/musescore/scoredata/g/1ca52c87a89c2e04b64b21ca9166c6d5a73a484f/score_0.png@280x390?no-cache=1567010808&bgclr=ffffff&fmt=webp&qlt=80">
+                    <div class="card-info">
+                        <h2 id="music-name">{{ music[0].name }}</h2>
+                        <h5>Upvotes: {{ music[0].upvotes }}</h5>
+                    </div>
+                </div>
+                
+                {{ modal.musicModal(music[0]) }}
+
+            {% endfor %}
+
+            <!-- Planned -->
+            {% for score_id in user.planned %}
+                {% set music = musics|selectattr("_id", "equalto", score_id)|list %}
+                <div class="music-card cl-ma cl-wo" id="music-card-{{ music[0]['_id'] }}">
+                    <img src="https://musescore.com/static/musescore/scoredata/g/1ca52c87a89c2e04b64b21ca9166c6d5a73a484f/score_0.png@280x390?no-cache=1567010808&bgclr=ffffff&fmt=webp&qlt=80">
+                    <div class="card-info">
+                        <h2 id="music-name">{{ music[0].name }}</h2>
+                        <h5>Upvotes: {{ music[0].upvotes }}</h5>
+                    </div>
+                </div>
+                
+                {{ modal.musicModal(music[0]) }}
+
+            {% endfor %}
+
+            <!-- Mastered -->
+            {% for score_id in user.mastered %}
+                {% set music = musics|selectattr("_id", "equalto", score_id)|list %}
+                <div class="music-card cl-wo cl-pln" id="music-card-{{ music[0]['_id'] }}">
+                    <img src="https://musescore.com/static/musescore/scoredata/g/1ca52c87a89c2e04b64b21ca9166c6d5a73a484f/score_0.png@280x390?no-cache=1567010808&bgclr=ffffff&fmt=webp&qlt=80">
+                    <div class="card-info">
+                        <h2 id="music-name">{{ music[0].name }}</h2>
+                        <h5>Upvotes: {{ music[0].upvotes }}</h5>
+                    </div>
+                </div>
+                
+                {{ modal.musicModal(music[0]) }}
+
+            {% endfor %}
+        </div>
+    </section>
+
 
     {% endblock %}    
 </body>

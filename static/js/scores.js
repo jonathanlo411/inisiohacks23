@@ -1,14 +1,25 @@
+document.getElementById("all").addEventListener("click", () => { sortModules("all")});
+document.getElementById("working-on").addEventListener("click", () => { sortModules("working-on")});
+document.getElementById("planned").addEventListener("click", () => { sortModules("planned")});
+document.getElementById("mastered").addEventListener("click", () => { sortModules("mastered")});
 
-let currentTime = new Date().getHours()
-if (currentTime < 11) {
-    msg = "Good morning, "
-} else if (currentTime < 16) {
-    msg = "Good afternoon, "
-} else {
-    msg = "Good evening, "
+
+function sortModules(sortType) {
+    const sortMap = {
+        "all": "asd",
+        "working-on": "cl-wo",
+        "planned": "cl-pln",
+        "mastered": "cl-ma"
+    }
+    let filteredDown = document.querySelectorAll(`.${sortMap[sortType]}`);
+    musicCards = document.querySelectorAll(".music-card")
+    musicCards.forEach(elem => {
+        elem.style.display = 'flex'
+    })
+    filteredDown.forEach(elem => {
+        elem.style.display = 'none'
+    })
 }
-let welcome = document.getElementById("welcome-msg")
-welcome.innerHTML = msg + welcome.innerHTML
 
 // Add Card Openners
 musicCards = document.querySelectorAll(".music-card")
