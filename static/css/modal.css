@@ -51,6 +51,7 @@
 .modal-right { 
     display: flex;
     flex: 7;
+    align-items: normal;
     flex-direction: column;
     justify-content: space-evenly;
 }
@@ -70,7 +71,7 @@
     width: 100%;
 }
 .buttons-array * {
-    margin: 0.25%;
+    margin: 0.3%;
     padding: 2% 5%;
     font-weight: bold;
 }
@@ -87,6 +88,15 @@
 }
 .buttons-array > button {
     width: 100%;
+}
+.modal-left select,select:focus {
+    width: 100%;
+    text-align: center;
+    padding: 1% 5%;
+    outline: none;
+}
+.modal-left select:hover {
+    cursor: pointer;
 }
 
 .modal-right h1 {

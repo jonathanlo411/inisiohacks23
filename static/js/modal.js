@@ -8,10 +8,15 @@ async function songVote(element, upvote) {
         }),
         headers: { "Content-Type": "application/json" }
     })
-    console.log(data)
 }
 
-async function updateStatus(element, status) {
+async function updateStatus(element) {
+    let status = element.parentElement.querySelector("select").value
+    if (status === "-- Select --") return
+    if (status === "Planned") status = "planned"
+    if (status === "Working On") status = "working_on"
+    if (status === "Mastered") status = "mastered"
+
     let data = await fetch('/api/scores', {
         method: 'POST',
         body: JSON.stringify({
@@ -20,7 +25,6 @@ async function updateStatus(element, status) {
         }),
         headers: { "Content-Type": "application/json" }
     })
-    console.log(data)
 }
 
 
