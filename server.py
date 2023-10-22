@@ -253,13 +253,17 @@ def add_scores():
         # Remove the score from the all
         if score_id in user["working_on"]:
             user["working_on"].remove(score_id)
+            mongo.db.musicScore.update_one({"working_on": user["working_on"]});
         if score_id in user["planned"]:
             user["planned"].remove(score_id)
+            mongo.db.musicScore.update_one({"planned": user["planned"]});
         if score_id in user["mastered"]:
             user["mastered"].remove(score_id)
+            mongo.db.musicScore.update_one({"mastered": user["mastered"]});
 
         # Append the score to the appropriate list
         score_list.append(score_id)
+        mongo.db.musicScore.update_one({score_type: score_list});
 
         return {
             "success": 1,
