@@ -9,8 +9,11 @@ nav {
 }
 
 #logo {
-    height: 4vh;
+    height: 5vh;
     margin: 2vh;
+}
+#logo:hover {
+    cursor: pointer;
 }
 
 #links {
@@ -41,7 +44,7 @@ nav {
 #pfp:hover { cursor: pointer; }
 
 /* Popup */
-#overlay {
+#overlay-pfp {
     display: none;
     position: fixed;
     top: 0;
