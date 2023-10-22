@@ -2,45 +2,108 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='imgs/logosmall.png')}}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard | MelodyMentor</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/master.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/dashboard.css')}}">
     <script src="{{url_for('static', filename='js/dashboard.js')}}" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </head>
 <body>
     {% extends 'nav.html' %}
     {% block content %}
 
     <div id="welcome">
-        <h1 id="welcome-msg"> {{ user.display_name }}.</h1>
+        <h1 id="welcome-msg">{{ user.display_name }},</h1>
         <h4 id="subhead-msg">Here are some things that may require your attention.</h4>
     </div>
 
+    {% import 'modal.html' as modal %}
     <section class="dashboard-section" id="music-scores">
         <h3>Your Music Scores</h3>
         {% if user.working_on|length > 0 %}
         <div id="music-scores-grid">
             {% for score_id in user.working_on %}
-            <div class="music-card">
-                <img src="https://www.francescoparrinomusic.com/wp-content/uploads/Hallelujah-Sheet-Music-Piano-Solo-in-C-Major.png">
-                <div class="card-info">
-                    <h2>Piano Man</h2>
-                    <h5>Progress: 3/10</h5>
+                {% set found_music = musics|selectattr("_id", "equalto", score_id)|list %}
+                <div class="music-card" id="music-card-{{ score_id }}">
+                    <img src="https://www.francescoparrinomusic.com/wp-content/uploads/Hallelujah-Sheet-Music-Piano-Solo-in-C-Major.png">
+                    <div class="card-info">
+                        <h2>{{ found_music[0]['name'] }}</h2>
+                        <h5>Upvotes: {{ found_music[0]['total_votes'] }}</h5>
+                    </div>
                 </div>
-            </div>
+                {{ modal.musicModal(found_music[0]) }}
+            
             {% endfor %}
         </div>
         {% else %}
-            <h2 id="empty-msg">No Music Scores being Worked On. <a href="/explore">Explore Scores</a>!</h2>
+            <h2 id="empty-msg">No Music Scores being Worked On! <a href="/explore">Explore Scores</a>.</h2>
         {% endif %}
     </section>
 
     <section class="dashboard-section" id="analytics">
         <h3>Your Practice Digest</h3>
         <div id="graphs">
-
+            <canvas id="pie-chart"></canvas>
+            <canvas id="tester"></canvas>
         </div>
+        <script>
+            const ctx1 = document.getElementById("pie-chart").getContext("2d");
+            var xValues = ["Working On", "Planned", "Mastered"];
+            var yValues = [{{user['working_on']|length}},
+                            {{user['planned']|length}},
+                            {{user['mastered']|length}}];
+            var barColors = [
+            "#b91d47",
+            "#00aba9",
+            "#2b5797"
+            ];
+            
+            new Chart(ctx1, {
+                type: "doughnut",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                    backgroundColor: barColors,
+                    data: yValues
+                    }]
+                },
+                options: {
+                    title: {
+                    display: true,
+                    text: "Sheet Progress"
+                    }
+                }
+            });
+        </script>
+        <script>
+            const ctx2 = document.getElementById("tester").getContext("2d");
+            var xValues = ["Mastered/Completed", "Uncompleted"];
+            var yValues = [{{user['mastered']|length}},
+                            {{musics|length -  user['mastered']|length}}];
+            var barColors = [
+            "#00aba9",
+            "#b91d47"
+            ];
+            
+            new Chart(ctx2, {
+            type: "pie",
+            data: {
+                labels: xValues,
+                datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+                }]
+            },
+            options: {
+                title: {
+                display: true,
+                text: "Completion"
+                }
+            }
+            });
+        </script>
     </section>
 
     {% endblock %}    

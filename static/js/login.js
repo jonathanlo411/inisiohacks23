@@ -29,8 +29,6 @@ document.getElementById("submit"),addEventListener("submit", async (e) => {
             // Set auth and redirect to dashboard
             let currentDate = new Date();
             currentDate.setDate(currentDate.getDate() + 7);
-            console.log(currentDate.toDateString())
-            console.log(currentDate.toISOString())
             document.cookie = `auth=${data.cookie}; expires=${currentDate.toDateString()}`
             location.href = '/dashboard'
         } else {
