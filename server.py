@@ -284,7 +284,7 @@ def add_scores():
             "message": "session invalid"
         }, 401
     else:
-        if score_type == null:
+        if score_type == None:
             return {
                 "success": 0,
                 "message": "score type was null"

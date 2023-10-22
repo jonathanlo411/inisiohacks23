@@ -13,6 +13,8 @@
     {% extends 'nav.html' %}
     {% block content %}
  
+    
+    {% import 'modal.html' as modal %}
     <div id="header">
         <h2 id="explore">Explore</h2>
         <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for scores...">
@@ -32,37 +34,20 @@
     <section id="music-scores">
         <div id="music-scores-grid">
             {% for music in musics %}
-            <div class="music-card" data-popular="{{ music.upvotes }}" data-recent="{{ music.Released }}" data-top="{{  music.upvotes / music.total_votes }}">
+            <div class="music-card" id="music-card-{{ music['_id'] }}" data-popular="{{ music.upvotes }}" data-recent="{{ music.Released }}" data-top="{{  music.upvotes / music.total_votes }}">
                 <img src="https://www.francescoparrinomusic.com/wp-content/uploads/Hallelujah-Sheet-Music-Piano-Solo-in-C-Major.png">
                 <div class="card-info">
                     <h2 id="music-name">{{ music.name }}</h2>
                     <h5>Upvotes: {{ music.upvotes }}</h5>
                 </div>
             </div>
+            
+            {{ modal.musicModal(music) }}
 
             {% endfor %}
         </div>
     </section>
 
-
-    <section id="music-scores">
-        {% if music_list|length > 0 %}
-        <div id="music-scores-grid">
-            <!-- for element in musicScore -->
-            {% for music in music_list %}
-            <div class="music-card">
-                <img src="https://www.francescoparrinomusic.com/wp-content/uploads/Hallelujah-Sheet-Music-Piano-Solo-in-C-Major.png">
-                <div class="card-info">
-                    <h2 id="music-name">{{ music.name }}</h2>
-                    <h5>Progress: 3/10</h5>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% else %}
-            <h2 id="empty-explore">No new scores available! <a href="/dashboard">View current scores</a>!</h2>
-        {% endif %}
-    </section>
 
     {% endblock %}    
 </body>

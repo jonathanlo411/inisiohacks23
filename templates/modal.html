@@ -12,7 +12,6 @@
 </head>
 <body>
     <div class="modal-overlay" id="modal-overlay-{{ musicInfo['_id'] }}"></div>
-    <section>
     <div class="modal" id="modal-{{musicInfo['_id']}}">
         <div class="modal-left">
             <div class="pfp" style="background-image: url(https://musescore.com/static/musescore/scoredata/g/1ca52c87a89c2e04b64b21ca9166c6d5a73a484f/score_0.png@280x390?no-cache=1567010808&bgclr=ffffff&fmt=webp&qlt=80);"></div>
@@ -21,7 +20,7 @@
                     <button data-id="{{ musicInfo['_id'] }}" onclick="songVote(this, true)">Upvote</button>
                     <button data-id="{{ musicInfo['_id'] }}" onclick="songVote(this, false)">Downvote</button>
                 </div>
-                <button>Save to My Scores</button>
+                <button data-id="{{ musicInfo['_id'] }}" onclick="updateStatus(this, 'working_on')">Save to My Scores</button>
                 <button onclick="playSong(`{{ musicInfo['_id'] }}`)">Practice</button>
             </div>
         </div>

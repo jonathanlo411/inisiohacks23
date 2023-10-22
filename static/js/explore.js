@@ -83,3 +83,29 @@ function shuffleArray(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
+// Add Card Openners
+musicCards = document.querySelectorAll(".music-card")
+musicCards.forEach(element => {
+    element.addEventListener("click", () => {
+        let id = element.id.replace("music-card-", "")
+        const modal = document.getElementById(`modal-${id}`)
+        const overlay = document.getElementById(`modal-overlay-${id}`)
+        modal.style.display = "flex";
+        overlay.style.display = "block";
+        document.querySelector("body").style.overflow = 'hidden';
+    })
+});
+
+// Add Overlay Closers
+const modalOverlays = document.querySelectorAll(".modal-overlay")
+const modals = document.querySelectorAll(".modal")
+modalOverlays.forEach(element => {
+    element.addEventListener("click", () => {
+        modals.forEach(modal => {
+            modal.style.display = "none";
+        })
+        element.style.display = "none";
+        document.querySelector("body").style.overflow = 'visible';
+    })
+});
