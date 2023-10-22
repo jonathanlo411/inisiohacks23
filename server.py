@@ -266,6 +266,7 @@ def logout_api():
 
 
 
+
 @app.route('/api/scores', methods=['POST'])
 def add_scores():
     # Get the score to add or remove
