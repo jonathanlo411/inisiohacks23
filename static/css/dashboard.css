@@ -66,6 +66,9 @@
     cursor: pointer;
     background-color: var(--highlight-darken);
 }
+#music-name {
+    text-align: center;
+}
 #warn-msg {
     display: flex;
     flex-direction: column;
